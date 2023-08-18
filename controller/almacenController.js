@@ -4,6 +4,7 @@ const { getSignedUrl } = require("@aws-sdk/s3-request-presigner")
 const { ObjectId } = require('mongodb');
 const uuid = require('uuid');
 const Insumo = require("../models/insumo")
+const Error = require("../models/error")
 
 const client = new S3Client({
     region: process.env.REGION, // Por ejemplo, 'us-east-1'
@@ -123,6 +124,26 @@ async function enviarLista(req,res){
     }
 }
 
+async function guardarErrores(req,res){
+    try{
+        const newError = {
+            ubicacion:req.body.ubicacion,
+            descripcion:req.body.descripcion,
+            contenido:req.body.contenido.error
+        }
+
+        await Error.create(newError).then(()=>{
+            const io = req.app.io;
+            io.sockets.emit('error',()=>{
+                console.log("nuevo error :c")
+            })
+            res.status(200).json({ message: "Exito" })
+        })
+    }catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 async function uploadToAWS(archivo) {
 
     const params = {
@@ -197,7 +218,8 @@ module.exports = {
     obtener,
     modificar,
     eliminar,
-    enviarLista
+    enviarLista,
+    guardarErrores
 }
 
 

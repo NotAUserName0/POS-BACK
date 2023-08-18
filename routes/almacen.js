@@ -13,4 +13,7 @@ router.put("/modificar",upload.single('archivo'),al.modificar);
 router.delete("/eliminar/:id",al.eliminar)
 router.post("/lista",al.enviarLista)
 
+/* ERROR MANAGEMENT */
+router.post("/error",al.guardarErrores)
+
 module.exports = router;

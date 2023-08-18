@@ -7,6 +7,8 @@ const express = require('express');
 const app = express()
 const cors = require('cors')
 const almacenRoutes = require("./routes/almacen")
+const logRoutes = require("./routes/log")
+const managerRoutes = require("./routes/manager")
 const connectDB = require('./connections/db');
 
 const http = require('http').createServer(app);
@@ -23,6 +25,8 @@ connectDB().then( //Primero verifico la conexion a la base de datos antes que na
         }))
 
         app.use("/almacen", almacenRoutes)
+        app.use("/log",logRoutes)
+        app.use("/encargados",managerRoutes)
 
         app.get("/", (req, res) => {
             res.json({
