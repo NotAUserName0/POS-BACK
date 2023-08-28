@@ -107,9 +107,23 @@ async function eliminarUno(req, res) {
     }
 }
 
+async function eliminarTodo(req, res){
+    try{
+        await Manager.deleteMany({}).then(()=>{
+            const io = req.app.io;
+            io.sockets.emit('listaManager', () => {
+                console.log("reiniciando lista")
+            })
+        })
+    }catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
 module.exports = {
     crear,
     obtener,
     modificar,
-    eliminarUno
+    eliminarUno,
+    eliminarTodo
 }

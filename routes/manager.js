@@ -7,5 +7,6 @@ router.post("/add",man.crear)
 router.get("/obtener",man.obtener)
 router.put("/modificar/:id",man.modificar)
 router.delete("/eliminarUno/:id",man.eliminarUno)
+router.delete("/drop",man.eliminarTodo)
 
 module.exports = router;
